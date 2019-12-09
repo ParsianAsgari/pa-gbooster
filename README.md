@@ -27,14 +27,14 @@ For task #2.b, please, implement the prediction function (forward pass) for Boos
 Please provide a solution in a form that is suitable for running (i.e. by giving requirements.txt for pip/virtualenv or as a Docker image with the environment set up).
 
 
-## About GB_Booster:
+## About GB_Regressor:
 
-This package provides regressing using gradient boosting. There are two methods:
+This package provides regressing using gradient boosting technique. There are two options:
 
 1. **XGBoost**: This is built using XGB libraries
 2. **PA-GB**: This is built in part by using Scikit-learn's DecisionTreeRegressor
 
-Once installed, the user needs to place the raw data into the ```./data/raw``` folder. Through the gateway ```gb_booster.py```, the application will provide three functionalities: 
+Once installed, the user needs to place the raw data into the ```./data/raw``` folder. Through the gateway ```gb_regressor.py```, the application will provide three functionalities: 
 
 i. **splitdata**: The application automatically processes the data and create X_train, X_test, y_train, y_test data tables and saves them in ```./data/processed``` folder. 
 
@@ -68,14 +68,14 @@ foo@bar huami-interview:$ pip install .
 ```
 The program will automatically stitches the files and does the processing.
 
-2. Navigate to the package folder ```gb_booster```:
+2. Navigate to the package folder ```gb_regressor```:
 ```bash
-foo@bar huami-interview:$ cd gb_booster
+foo@bar huami-interview:$ cd gb_regressor
 ```
 
 3. Run the following command to see the program's option:
 ```bash
-foo@bar huami-interview/gb_booster:$ python gb_booster.py -h
+foo@bar huami-interview/gb_regressor:$ python gb_regressor.py -h
 ```
 
 Here are the options:
@@ -106,7 +106,7 @@ Options:
 
 - example: Splitting the data located in the ```./data/raw```:
 ```bash
-foo@bar huami-interview/gb_booster:$ python splitdat 0.2
+foo@bar huami-interview/gb_regressor:$ python gb_regressor.py splitdat 0.2
 ```
     
 4-2. **Training:** select either Parsian's Gradient Booster Regressor ```pa-ga``` or XGBoost Regressor ```xgb```:
@@ -114,11 +114,11 @@ foo@bar huami-interview/gb_booster:$ python splitdat 0.2
 
 - example: Train the ```xgb``` model, serialize and save it as ```xgb-trained-model```
 ```bash
-foo@bar huami-interview/gb_booster:$ python gb_booster.py train xgb xgb-trained-model
+foo@bar huami-interview/gb_regressor:$ python gb_regressor.py train xgb xgb-trained-model
 ```
 
 4-3. **Predicting:** select either Parsian's Gradient Booster Predictor ```pa-ga``` or XGBoost Predictor ```xgb```:
 - example: Using the step above's pre-trained serialized model, lets do some predictions on the X_test data:
 ```bash
-foo@bar huami-interview/gb_booster:$ python gb_booster.py predict xgb xgb-trained-model
+foo@bar huami-interview/gb_regressor:$ python gb_regressor.py predict xgb xgb-trained-model
 ```
