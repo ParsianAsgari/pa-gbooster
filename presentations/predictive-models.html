@@ -13123,7 +13123,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
@@ -13146,8 +13146,8 @@ div#notebook {
 <span class="k">if</span> <span class="n">module_path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">src.data.make_dataset</span> <span class="kn">import</span> <span class="n">Make_DataSet</span>
-<span class="kn">from</span> <span class="nn">src.my_ml_tools.gradient_booster</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># Parsian&#39;s implementation of Regressor Gradient Boosting</span>
+<span class="c1"># Parsian&#39;s modules</span>
+<span class="kn">from</span> <span class="nn">src</span> <span class="kn">import</span> <span class="n">FilePaths</span><span class="p">,</span> <span class="n">Data_Properties</span><span class="p">,</span> <span class="n">Make_DataSet</span><span class="p">,</span> <span class="n">Regressor_GradientBoost</span><span class="p">,</span> <span class="n">RegressGB_Parameters</span><span class="p">,</span> <span class="n">RegressXGB_Parameters</span>
 </pre></div>
 
     </div>
@@ -13158,93 +13158,9 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-Data--">Loading Data  <a class="anchor" id="LoadingData" /><a class="anchor-link" href="#Loading-Data--">&#182;</a></h2>
+<h2 id="Data-Import-&amp;-Processing--">Data Import &amp; Processing  <a class="anchor" id="LoadingData" /><a class="anchor-link" href="#Data-Import-&amp;-Processing--">&#182;</a></h2>
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Set-path-to-data-folder">Set path to data folder<a class="anchor-link" href="#Set-path-to-data-folder">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">parentdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">))</span>
-<span class="n">datadir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parentdir</span><span class="p">,</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
-<span class="n">dataprocessed</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parentdir</span><span class="p">,</span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="s1">&#39;processed&#39;</span><span class="p">)</span>
-<span class="n">models</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parentdir</span><span class="p">,</span> <span class="s1">&#39;models&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Import-CSV-and-stitch-into-a-Pandas-Dataframe">Import CSV and stitch into a Pandas Dataframe<a class="anchor-link" href="#Import-CSV-and-stitch-into-a-Pandas-Dataframe">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We are going to stiched the .csv files into one dataframe:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stitcher</span> <span class="o">=</span> <span class="n">CSV_Stitcher</span><span class="p">(</span><span class="n">datadir</span><span class="p">,</span> <span class="n">dataprocessed</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stitched_df</span> <span class="o">=</span> <span class="n">stitcher</span><span class="o">.</span><span class="n">stitch_csv</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The following .csv files will get stitched: 
-[&#39;1_record_diast.csv&#39;, &#39;2_record_diast.csv&#39;, &#39;3_record_diast.csv&#39;, &#39;4_record_diast.csv&#39;, &#39;5_record_diast.csv&#39;, &#39;6_record_diast.csv&#39;, &#39;7_record_diast.csv&#39;, &#39;8_record_diast.csv&#39;, &#39;9_record_diast.csv&#39;, &#39;10_record_diast.csv&#39;, &#39;11_record_diast.csv&#39;, &#39;12_record_diast.csv&#39;, &#39;13_record_diast.csv&#39;, &#39;14_record_diast.csv&#39;, &#39;15_record_diast.csv&#39;]
-Stitching is done!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13329,50 +13245,24 @@ Stitching is done!
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We are going to handle the missing data differently for the XGBoost and my own DIY Gradient Boost model.</p>
+<p>We begin by placiong the raw .csv files into the <code>/data/raw</code> directory. The following block will:</p>
+<ol>
+<li>Load the CSV files</li>
+<li>Stiches the CSV files</li>
+<li>Impute the missing values (default: median of the column)</li>
+<li>Create training set: X_train, y_train and testing set: X_test, y_test</li>
+</ol>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="pre-processing-data-frame:">pre-processing data frame:<a class="anchor-link" href="#pre-processing-data-frame:">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stitched_df</span> <span class="o">=</span> <span class="n">stitched_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">analysis_df_preprocessed</span> <span class="o">=</span> <span class="n">stitched_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">analysis_df_preprocessed</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_prep</span> <span class="o">=</span> <span class="n">Make_DataSet</span><span class="p">()</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">data_prep</span><span class="o">.</span><span class="n">load_split_data</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -13385,179 +13275,21 @@ Stitching is done!
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[7]:</div>
+    <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>target</th>
-      <th>feature_1</th>
-      <th>feature_2</th>
-      <th>feature_3</th>
-      <th>feature_4</th>
-      <th>feature_5</th>
-      <th>feature_6</th>
-      <th>feature_7</th>
-      <th>feature_8</th>
-      <th>feature_9</th>
-      <th>...</th>
-      <th>feature_56</th>
-      <th>feature_57</th>
-      <th>feature_58</th>
-      <th>feature_59</th>
-      <th>feature_60</th>
-      <th>feature_61</th>
-      <th>feature_62</th>
-      <th>feature_63</th>
-      <th>feature_64</th>
-      <th>feature_65</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>-0.613031</td>
-      <td>-0.053620</td>
-      <td>-31.607668</td>
-      <td>-0.157781</td>
-      <td>18.810949</td>
-      <td>46.398207</td>
-      <td>-33</td>
-      <td>-14</td>
-      <td>-5.329104</td>
-      <td>46.153171</td>
-      <td>...</td>
-      <td>0.254669</td>
-      <td>0.628154</td>
-      <td>-0.446765</td>
-      <td>-0.189537</td>
-      <td>-0.072147</td>
-      <td>0.624837</td>
-      <td>-350.621060</td>
-      <td>0.925521</td>
-      <td>0.000201</td>
-      <td>0.000106</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2.912298</td>
-      <td>-0.101502</td>
-      <td>-51.074790</td>
-      <td>0.299416</td>
-      <td>-21.747255</td>
-      <td>47.560793</td>
-      <td>-17</td>
-      <td>11</td>
-      <td>-5.329104</td>
-      <td>4.587944</td>
-      <td>...</td>
-      <td>-0.294421</td>
-      <td>0.643893</td>
-      <td>-0.230152</td>
-      <td>0.148922</td>
-      <td>-0.072147</td>
-      <td>0.062113</td>
-      <td>-295.188462</td>
-      <td>0.802615</td>
-      <td>-0.000074</td>
-      <td>-0.000264</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>6.129125</td>
-      <td>-0.094319</td>
-      <td>-81.653791</td>
-      <td>0.102004</td>
-      <td>-29.935130</td>
-      <td>45.707137</td>
-      <td>-16</td>
-      <td>-77</td>
-      <td>-3.881140</td>
-      <td>54.118507</td>
-      <td>...</td>
-      <td>-0.405271</td>
-      <td>0.618798</td>
-      <td>-0.216613</td>
-      <td>-1.042451</td>
-      <td>-0.052544</td>
-      <td>0.732674</td>
-      <td>146.479143</td>
-      <td>1.145548</td>
-      <td>-0.000089</td>
-      <td>0.000053</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2.928182</td>
-      <td>-0.112184</td>
-      <td>-64.922236</td>
-      <td>0.288529</td>
-      <td>-26.148199</td>
-      <td>46.367224</td>
-      <td>-27</td>
-      <td>3</td>
-      <td>-5.329104</td>
-      <td>30.266565</td>
-      <td>...</td>
-      <td>-0.354003</td>
-      <td>0.627734</td>
-      <td>-0.365535</td>
-      <td>0.040615</td>
-      <td>-0.072147</td>
-      <td>0.409759</td>
-      <td>-637.510898</td>
-      <td>0.277151</td>
-      <td>0.001875</td>
-      <td>0.000687</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0.154080</td>
-      <td>-0.025889</td>
-      <td>-23.782382</td>
-      <td>0.043226</td>
-      <td>-10.377502</td>
-      <td>54.084277</td>
-      <td>-126</td>
-      <td>-40</td>
-      <td>-1.599500</td>
-      <td>240.520366</td>
-      <td>...</td>
-      <td>-0.140494</td>
-      <td>0.732210</td>
-      <td>-1.705829</td>
-      <td>-0.541533</td>
-      <td>-0.021655</td>
-      <td>3.256243</td>
-      <td>-2415.396347</td>
-      <td>0.179903</td>
-      <td>0.000981</td>
-      <td>0.000687</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 66 columns</p>
+The following .csv files will get stitched: 
+[&#39;1_record_diast.csv&#39;, &#39;2_record_diast.csv&#39;, &#39;3_record_diast.csv&#39;, &#39;4_record_diast.csv&#39;, &#39;5_record_diast.csv&#39;, &#39;6_record_diast.csv&#39;, &#39;7_record_diast.csv&#39;, &#39;8_record_diast.csv&#39;, &#39;9_record_diast.csv&#39;, &#39;10_record_diast.csv&#39;, &#39;11_record_diast.csv&#39;, &#39;12_record_diast.csv&#39;, &#39;13_record_diast.csv&#39;, &#39;14_record_diast.csv&#39;, &#39;15_record_diast.csv&#39;]
+Stitching is done!
+Fill null values with : median
+The target is:  target
+The features are:  [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;, &#39;feature_21&#39;, &#39;feature_22&#39;, &#39;feature_23&#39;, &#39;feature_24&#39;, &#39;feature_25&#39;, &#39;feature_26&#39;, &#39;feature_27&#39;, &#39;feature_28&#39;, &#39;feature_29&#39;, &#39;feature_30&#39;, &#39;feature_31&#39;, &#39;feature_32&#39;, &#39;feature_33&#39;, &#39;feature_34&#39;, &#39;feature_35&#39;, &#39;feature_36&#39;, &#39;feature_37&#39;, &#39;feature_38&#39;, &#39;feature_39&#39;, &#39;feature_40&#39;, &#39;feature_41&#39;, &#39;feature_42&#39;, &#39;feature_43&#39;, &#39;feature_44&#39;, &#39;feature_45&#39;, &#39;feature_46&#39;, &#39;feature_47&#39;, &#39;feature_48&#39;, &#39;feature_49&#39;, &#39;feature_50&#39;, &#39;feature_51&#39;, &#39;feature_52&#39;, &#39;feature_53&#39;, &#39;feature_54&#39;, &#39;feature_55&#39;, &#39;feature_56&#39;, &#39;feature_57&#39;, &#39;feature_58&#39;, &#39;feature_59&#39;, &#39;feature_60&#39;, &#39;feature_61&#39;, &#39;feature_62&#39;, &#39;feature_63&#39;, &#39;feature_64&#39;, &#39;feature_65&#39;]
+Generated X_train, X_test, y_train, y_test with test_size:  0.2
+</pre>
 </div>
-</div>
-
 </div>
 
 </div>
@@ -13567,29 +13299,7 @@ Stitching is done!
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Seperate-Features-and-Target:">Seperate Features and Target:<a class="anchor-link" href="#Seperate-Features-and-Target:">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_analysis_df_preprocessed</span> <span class="o">=</span> <span class="n">analysis_df_preprocessed</span><span class="p">[[</span><span class="s1">&#39;target&#39;</span><span class="p">]]</span>
-<span class="n">X_analysis_df_preprocessed</span> <span class="o">=</span> <span class="n">analysis_df_preprocessed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">feature_list</span> <span class="o">=</span> <span class="n">X_analysis_df_preprocessed</span><span class="o">.</span><span class="n">columns</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We are going to threat the missing data for each of the models differently.</p>
+<p>We are going to handle the missing data differently for the XGBoost and my own DIY Gradient Boost model.</p>
 
 </div>
 </div>
@@ -13604,63 +13314,13 @@ Stitching is done!
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Missing-Data:">Missing Data:<a class="anchor-link" href="#Missing-Data:">&#182;</a></h3><p>According to the documentation, this algorithm can handle missing data internally.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Split-data-into-training-and-testing-sets:">Split data into training and testing sets:<a class="anchor-link" href="#Split-data-into-training-and-testing-sets:">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_analysis_df_preprocessed</span><span class="p">,</span> <span class="n">y_analysis_df_preprocessed</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Create-Data-Matrix-for-Scikit-learn's-Cross-Validation-Analysis">Create Data Matrix for Scikit-learn's Cross Validation Analysis<a class="anchor-link" href="#Create-Data-Matrix-for-Scikit-learn's-Cross-Validation-Analysis">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">data_dmatrix</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_analysis_df_preprocessed</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">y_analysis_df_preprocessed</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Implement-XGRegressor">Implement XGRegressor<a class="anchor-link" href="#Implement-XGRegressor">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">fit_xgb_regressor</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> 
@@ -13727,7 +13387,27 @@ Stitching is done!
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Parameters</span>
+<span class="c1"># Initial Paramters:</span>
+
+<span class="n">colsample_bytree</span><span class="o">=</span><span class="mf">0.3</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.1</span> 
+<span class="n">max_depth</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">70</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_reg_oho</span> <span class="o">=</span> <span class="n">fit_xgb_regressor</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
@@ -13747,7 +13427,7 @@ Stitching is done!
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[20:21:15] WARNING: C:/Jenkins/workspace/xgboost-win64_release_0.90/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
+<pre>[13:14:53] WARNING: C:/Jenkins/workspace/xgboost-win64_release_0.90/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
 </pre>
 </div>
 </div>
@@ -13758,7 +13438,7 @@ Stitching is done!
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[76]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">predictions</span><span class="p">,</span> <span class="n">rmse</span><span class="p">,</span> <span class="n">r_squared</span> <span class="o">=</span> <span class="n">predict_rmse_rsqured</span><span class="p">(</span><span class="n">xgb_reg_oho</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
@@ -13778,8 +13458,8 @@ Stitching is done!
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>RMSE: 4.430355
-R Squared: 0.892470
+<pre>RMSE: 4.430003
+R Squared: 0.892487
 </pre>
 </div>
 </div>
@@ -13803,32 +13483,25 @@ R Squared: 0.892470
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The One Hold Out validation for this model produce an RMSE of 4.43. Let us try K-Fold Cross Validation to get a better picture of its performance:</p>
-
+<h3 id="Bayesian-Optimization-with-XGBoost">Bayesian Optimization with XGBoost<a class="anchor-link" href="#Bayesian-Optimization-with-XGBoost">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="3-Fold-Cross-Validation:">3 Fold Cross Validation:<a class="anchor-link" href="#3-Fold-Cross-Validation:">&#182;</a></h4>
+<p>The parameter space will be optimized using a Bayesian Optimization technique:</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### Parameters for Cross Validation:</span>
-
-<span class="n">cv_param_dic</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
-                <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-                <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> 
-                <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
-
-<span class="n">cv_results</span> <span class="o">=</span> <span class="n">cv_xgboost_regressor</span><span class="p">(</span><span class="n">data_matrix</span><span class="o">=</span><span class="n">data_dmatrix</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">cv_param_dic</span><span class="p">)</span>
-<span class="n">cv_results</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dmatrix</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">test_dmatrix</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13844,535 +13517,20 @@ R Squared: 0.892470
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[19:57:30] WARNING: C:/Jenkins/workspace/xgboost-win64_release_0.90/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
-[19:57:34] WARNING: C:/Jenkins/workspace/xgboost-win64_release_0.90/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
-[19:57:39] WARNING: C:/Jenkins/workspace/xgboost-win64_release_0.90/src/objective/regression_obj.cu:152: reg:linear is now deprecated in favor of reg:squarederror.
-Top 5 Cross Validation RMSEs:     train-rmse-mean  train-rmse-std  test-rmse-mean  test-rmse-std
-0        12.504210        0.004915       12.505190       0.009238
-1        11.701445        0.081792       11.702601       0.073075
-2        10.928425        0.044640       10.930200       0.034758
-3        10.287901        0.033138       10.290820       0.024481
-4         9.692686        0.050746        9.696625       0.044029
-Last Cross Validation RMSE between Validation and Actual:  69    4.425063
-Name: test-rmse-mean, dtype: float64
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\asgar\Anaconda3\lib\site-packages\xgboost\core.py:587: FutureWarning: Series.base is deprecated and will be removed in a future version
+  if getattr(data, &#39;base&#39;, None) is not None and \
 </pre>
 </div>
 </div>
 
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[66]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>train-rmse-mean</th>
-      <th>train-rmse-std</th>
-      <th>test-rmse-mean</th>
-      <th>test-rmse-std</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>12.504210</td>
-      <td>0.004915</td>
-      <td>12.505190</td>
-      <td>0.009238</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>11.701445</td>
-      <td>0.081792</td>
-      <td>11.702601</td>
-      <td>0.073075</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>10.928425</td>
-      <td>0.044640</td>
-      <td>10.930200</td>
-      <td>0.034758</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>10.287901</td>
-      <td>0.033138</td>
-      <td>10.290820</td>
-      <td>0.024481</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>9.692686</td>
-      <td>0.050746</td>
-      <td>9.696625</td>
-      <td>0.044029</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>9.164222</td>
-      <td>0.040837</td>
-      <td>9.169463</td>
-      <td>0.036304</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>8.724850</td>
-      <td>0.071716</td>
-      <td>8.730798</td>
-      <td>0.071269</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>8.310661</td>
-      <td>0.045305</td>
-      <td>8.317111</td>
-      <td>0.046158</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>7.977439</td>
-      <td>0.069832</td>
-      <td>7.984037</td>
-      <td>0.069572</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>7.646682</td>
-      <td>0.054651</td>
-      <td>7.653600</td>
-      <td>0.054678</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>7.405196</td>
-      <td>0.069721</td>
-      <td>7.412858</td>
-      <td>0.069859</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>7.171480</td>
-      <td>0.044304</td>
-      <td>7.179518</td>
-      <td>0.043965</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>6.952350</td>
-      <td>0.036094</td>
-      <td>6.961573</td>
-      <td>0.033865</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>6.760771</td>
-      <td>0.048105</td>
-      <td>6.770262</td>
-      <td>0.045023</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>6.592921</td>
-      <td>0.038885</td>
-      <td>6.603078</td>
-      <td>0.033999</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>6.453544</td>
-      <td>0.035714</td>
-      <td>6.464091</td>
-      <td>0.028866</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>6.331185</td>
-      <td>0.039265</td>
-      <td>6.342286</td>
-      <td>0.031342</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>6.226995</td>
-      <td>0.041961</td>
-      <td>6.238879</td>
-      <td>0.034117</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>6.120738</td>
-      <td>0.035960</td>
-      <td>6.132851</td>
-      <td>0.027068</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>6.020960</td>
-      <td>0.028147</td>
-      <td>6.033577</td>
-      <td>0.019065</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>5.928477</td>
-      <td>0.021144</td>
-      <td>5.940865</td>
-      <td>0.012039</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>5.845851</td>
-      <td>0.018189</td>
-      <td>5.858716</td>
-      <td>0.009136</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>5.764133</td>
-      <td>0.023591</td>
-      <td>5.777401</td>
-      <td>0.018779</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>5.699608</td>
-      <td>0.019468</td>
-      <td>5.713686</td>
-      <td>0.017833</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>5.635105</td>
-      <td>0.024755</td>
-      <td>5.649578</td>
-      <td>0.022830</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>5.570357</td>
-      <td>0.035072</td>
-      <td>5.585045</td>
-      <td>0.031053</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>5.510351</td>
-      <td>0.034363</td>
-      <td>5.525133</td>
-      <td>0.030948</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>5.449112</td>
-      <td>0.036810</td>
-      <td>5.464591</td>
-      <td>0.032709</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>5.408748</td>
-      <td>0.036821</td>
-      <td>5.424519</td>
-      <td>0.033054</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>5.356280</td>
-      <td>0.035095</td>
-      <td>5.372656</td>
-      <td>0.030280</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>40</th>
-      <td>4.938552</td>
-      <td>0.026051</td>
-      <td>4.959134</td>
-      <td>0.028239</td>
-    </tr>
-    <tr>
-      <th>41</th>
-      <td>4.913971</td>
-      <td>0.024509</td>
-      <td>4.934786</td>
-      <td>0.025411</td>
-    </tr>
-    <tr>
-      <th>42</th>
-      <td>4.891535</td>
-      <td>0.022997</td>
-      <td>4.912113</td>
-      <td>0.022613</td>
-    </tr>
-    <tr>
-      <th>43</th>
-      <td>4.866997</td>
-      <td>0.028371</td>
-      <td>4.888056</td>
-      <td>0.027899</td>
-    </tr>
-    <tr>
-      <th>44</th>
-      <td>4.842504</td>
-      <td>0.024180</td>
-      <td>4.864192</td>
-      <td>0.024801</td>
-    </tr>
-    <tr>
-      <th>45</th>
-      <td>4.828454</td>
-      <td>0.025113</td>
-      <td>4.850477</td>
-      <td>0.025371</td>
-    </tr>
-    <tr>
-      <th>46</th>
-      <td>4.803511</td>
-      <td>0.017705</td>
-      <td>4.825393</td>
-      <td>0.016847</td>
-    </tr>
-    <tr>
-      <th>47</th>
-      <td>4.785260</td>
-      <td>0.019801</td>
-      <td>4.807610</td>
-      <td>0.019403</td>
-    </tr>
-    <tr>
-      <th>48</th>
-      <td>4.758966</td>
-      <td>0.018213</td>
-      <td>4.781638</td>
-      <td>0.019673</td>
-    </tr>
-    <tr>
-      <th>49</th>
-      <td>4.739402</td>
-      <td>0.015758</td>
-      <td>4.761937</td>
-      <td>0.016019</td>
-    </tr>
-    <tr>
-      <th>50</th>
-      <td>4.716171</td>
-      <td>0.017203</td>
-      <td>4.738826</td>
-      <td>0.017814</td>
-    </tr>
-    <tr>
-      <th>51</th>
-      <td>4.695949</td>
-      <td>0.020379</td>
-      <td>4.719170</td>
-      <td>0.022431</td>
-    </tr>
-    <tr>
-      <th>52</th>
-      <td>4.672157</td>
-      <td>0.018977</td>
-      <td>4.695452</td>
-      <td>0.020852</td>
-    </tr>
-    <tr>
-      <th>53</th>
-      <td>4.653535</td>
-      <td>0.015679</td>
-      <td>4.676788</td>
-      <td>0.018705</td>
-    </tr>
-    <tr>
-      <th>54</th>
-      <td>4.636373</td>
-      <td>0.017613</td>
-      <td>4.659840</td>
-      <td>0.020401</td>
-    </tr>
-    <tr>
-      <th>55</th>
-      <td>4.622634</td>
-      <td>0.022407</td>
-      <td>4.646258</td>
-      <td>0.024917</td>
-    </tr>
-    <tr>
-      <th>56</th>
-      <td>4.601171</td>
-      <td>0.029028</td>
-      <td>4.624941</td>
-      <td>0.031151</td>
-    </tr>
-    <tr>
-      <th>57</th>
-      <td>4.583547</td>
-      <td>0.031482</td>
-      <td>4.607291</td>
-      <td>0.031668</td>
-    </tr>
-    <tr>
-      <th>58</th>
-      <td>4.563421</td>
-      <td>0.032212</td>
-      <td>4.587222</td>
-      <td>0.032196</td>
-    </tr>
-    <tr>
-      <th>59</th>
-      <td>4.545508</td>
-      <td>0.026261</td>
-      <td>4.569403</td>
-      <td>0.026571</td>
-    </tr>
-    <tr>
-      <th>60</th>
-      <td>4.529500</td>
-      <td>0.029886</td>
-      <td>4.553245</td>
-      <td>0.030541</td>
-    </tr>
-    <tr>
-      <th>61</th>
-      <td>4.511908</td>
-      <td>0.029002</td>
-      <td>4.536335</td>
-      <td>0.029437</td>
-    </tr>
-    <tr>
-      <th>62</th>
-      <td>4.497378</td>
-      <td>0.025656</td>
-      <td>4.522169</td>
-      <td>0.025177</td>
-    </tr>
-    <tr>
-      <th>63</th>
-      <td>4.487247</td>
-      <td>0.026865</td>
-      <td>4.512152</td>
-      <td>0.026464</td>
-    </tr>
-    <tr>
-      <th>64</th>
-      <td>4.477565</td>
-      <td>0.028759</td>
-      <td>4.502445</td>
-      <td>0.027963</td>
-    </tr>
-    <tr>
-      <th>65</th>
-      <td>4.458982</td>
-      <td>0.019346</td>
-      <td>4.484239</td>
-      <td>0.019361</td>
-    </tr>
-    <tr>
-      <th>66</th>
-      <td>4.443309</td>
-      <td>0.017648</td>
-      <td>4.468828</td>
-      <td>0.018714</td>
-    </tr>
-    <tr>
-      <th>67</th>
-      <td>4.432897</td>
-      <td>0.017700</td>
-      <td>4.458845</td>
-      <td>0.019500</td>
-    </tr>
-    <tr>
-      <th>68</th>
-      <td>4.414127</td>
-      <td>0.024449</td>
-      <td>4.440496</td>
-      <td>0.026132</td>
-    </tr>
-    <tr>
-      <th>69</th>
-      <td>4.398532</td>
-      <td>0.023289</td>
-      <td>4.425063</td>
-      <td>0.025738</td>
-    </tr>
-  </tbody>
-</table>
-<p>70 rows × 4 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>learning rate= 0.1 and num_boost_round = 50, The lowest RMSE base on 3 Fold Cross Validation is 4.76.
-learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cross Validation is 4.42</p>
-<p>learning rate = 0.15 and num_boost_round = 50, The lowest RMSE base on 3 Fold Cross Validation is 4.36</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Bayesian-Optimization-with-XGBoost">Bayesian Optimization with XGBoost<a class="anchor-link" href="#Bayesian-Optimization-with-XGBoost">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The parameter space will be optimized using a Bayesian Optimization technique:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_dmatrix</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">test_dmatrix</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">xgb_evaluate</span><span class="p">(</span><span class="n">max_depth</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">colsample_bytree</span><span class="p">):</span>
@@ -14397,76 +13555,13 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="First-Attempt:">First Attempt:<a class="anchor-link" href="#First-Attempt:">&#182;</a></h4>
+<h4 id="Optimization:">Optimization:<a class="anchor-link" href="#Optimization:">&#182;</a></h4>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_bo_training</span> <span class="o">=</span> <span class="n">BayesianOptimization</span><span class="p">(</span><span class="n">xgb_evaluate</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> 
-                                                      <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                                                      <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)})</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_bo_training</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="n">init_points</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">acq</span><span class="o">=</span><span class="s1">&#39;ei&#39;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>|   iter    |  target   | colsam... |   gamma   | max_depth |
--------------------------------------------------------------
-|  1        | -5.211    |  0.3616   |  0.8449   |  3.128    |
-| <span class="ansi-magenta-intense-fg"> 2       </span> | <span class="ansi-magenta-intense-fg">-4.547   </span> | <span class="ansi-magenta-intense-fg"> 0.3935  </span> | <span class="ansi-magenta-intense-fg"> 0.4583  </span> | <span class="ansi-magenta-intense-fg"> 4.21    </span> |
-|  3        | -4.572    |  0.3689   |  0.7059   |  4.935    |
-| <span class="ansi-magenta-intense-fg"> 4       </span> | <span class="ansi-magenta-intense-fg">-4.544   </span> | <span class="ansi-magenta-intense-fg"> 0.5     </span> | <span class="ansi-magenta-intense-fg"> 0.0     </span> | <span class="ansi-magenta-intense-fg"> 4.891   </span> |
-|  5        | -4.604    |  0.3      |  0.0      |  4.382    |
-|  6        | -4.544    |  0.5      |  0.4849   |  4.527    |
-|  7        | -4.604    |  0.3      |  1.0      |  4.375    |
-| <span class="ansi-magenta-intense-fg"> 8       </span> | <span class="ansi-magenta-intense-fg">-4.054   </span> | <span class="ansi-magenta-intense-fg"> 0.3     </span> | <span class="ansi-magenta-intense-fg"> 0.1562  </span> | <span class="ansi-magenta-intense-fg"> 5.0     </span> |
-=============================================================
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Second-Attempt:">Second Attempt:<a class="anchor-link" href="#Second-Attempt:">&#182;</a></h4>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_bo_training_2</span> <span class="o">=</span> <span class="n">BayesianOptimization</span><span class="p">(</span><span class="n">xgb_evaluate</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> 
@@ -14481,7 +13576,7 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_bo_training_2</span><span class="o">.</span><span class="n">maximize</span><span class="p">(</span><span class="n">init_points</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">acq</span><span class="o">=</span><span class="s1">&#39;ei&#39;</span><span class="p">)</span>
@@ -14503,14 +13598,14 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>|   iter    |  target   | colsam... |   gamma   | max_depth |
 -------------------------------------------------------------
-|  1        | -3.985    |  0.7615   |  0.9304   |  5.691    |
-| <span class="ansi-magenta-intense-fg"> 2       </span> | <span class="ansi-magenta-intense-fg">-3.973   </span> | <span class="ansi-magenta-intense-fg"> 0.7157  </span> | <span class="ansi-magenta-intense-fg"> 0.7656  </span> | <span class="ansi-magenta-intense-fg"> 5.152   </span> |
-|  3        | -3.987    |  0.8959   |  0.3682   |  5.359    |
-|  4        | -5.224    |  0.3      |  1.0      |  3.0      |
-| <span class="ansi-magenta-intense-fg"> 5       </span> | <span class="ansi-magenta-intense-fg">-3.13    </span> | <span class="ansi-magenta-intense-fg"> 0.3     </span> | <span class="ansi-magenta-intense-fg"> 0.0     </span> | <span class="ansi-magenta-intense-fg"> 7.0     </span> |
-| <span class="ansi-magenta-intense-fg"> 6       </span> | <span class="ansi-magenta-intense-fg">-3.125   </span> | <span class="ansi-magenta-intense-fg"> 0.9     </span> | <span class="ansi-magenta-intense-fg"> 0.0     </span> | <span class="ansi-magenta-intense-fg"> 7.0     </span> |
-|  7        | -3.137    |  0.3      |  1.0      |  7.0      |
-|  8        | -3.143    |  0.5537   |  0.4688   |  7.0      |
+|  1        | -5.063    |  0.8975   |  0.8271   |  3.427    |
+| <span class="ansi-magenta-intense-fg"> 2       </span> | <span class="ansi-magenta-intense-fg">-3.973   </span> | <span class="ansi-magenta-intense-fg"> 0.824   </span> | <span class="ansi-magenta-intense-fg"> 0.0841  </span> | <span class="ansi-magenta-intense-fg"> 5.071   </span> |
+|  3        | -4.015    |  0.388    |  0.2421   |  5.16     |
+| <span class="ansi-magenta-intense-fg"> 4       </span> | <span class="ansi-magenta-intense-fg">-3.135   </span> | <span class="ansi-magenta-intense-fg"> 0.9     </span> | <span class="ansi-magenta-intense-fg"> 0.0     </span> | <span class="ansi-magenta-intense-fg"> 7.0     </span> |
+|  5        | -3.144    |  0.9      |  1.0      |  7.0      |
+|  6        | -3.161    |  0.3      |  0.4767   |  7.0      |
+| <span class="ansi-magenta-intense-fg"> 7       </span> | <span class="ansi-magenta-intense-fg">-3.132   </span> | <span class="ansi-magenta-intense-fg"> 0.9     </span> | <span class="ansi-magenta-intense-fg"> 0.4669  </span> | <span class="ansi-magenta-intense-fg"> 7.0     </span> |
+|  8        | -3.156    |  0.3      |  0.0      |  7.0      |
 =============================================================
 </pre>
 </div>
@@ -14522,7 +13617,7 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">optimized_params</span> <span class="o">=</span> <span class="n">xgb_bo_training_2</span><span class="o">.</span><span class="n">max</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span>
@@ -14540,13 +13635,13 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[42]:</div>
+    <div class="prompt output_prompt">Out[60]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;colsample_bytree&#39;: 0.9, &#39;gamma&#39;: 0.0, &#39;max_depth&#39;: 7}</pre>
+<pre>{&#39;colsample_bytree&#39;: 0.9, &#39;gamma&#39;: 0.4668672005782674, &#39;max_depth&#39;: 7}</pre>
 </div>
 
 </div>
@@ -14557,7 +13652,7 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_optimized_params</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">optimized_params</span><span class="p">,</span> <span class="n">train_dmatrix</span><span class="p">,</span> <span class="n">num_boost_round</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
@@ -14570,7 +13665,7 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred_xgb</span> <span class="o">=</span> <span class="n">model_optimized_params</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_dmatrix</span><span class="p">)</span>
@@ -14594,8 +13689,8 @@ learning rate = 0.1 and num_boost_round = 70, The lowest RMSE base on 3 Fold Cro
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Model Prediction on Y Test Data RMSE: 1.8790727643245035
-Model Prediction on Y Train Data RMSE: 1.650457238010561
+<pre>Model Prediction on Y Test Data RMSE: 1.8731620555189703
+Model Prediction on Y Train Data RMSE: 1.6518342619805442
 </pre>
 </div>
 </div>
@@ -14613,35 +13708,38 @@ Model Prediction on Y Train Data RMSE: 1.650457238010561
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pkl_fname</span> <span class="o">=</span> <span class="s2">&quot;XGBoost_Regressor_Model_Pickled.pkl&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pkl_fname</span> <span class="o">=</span> <span class="s2">&quot;Jupyter-XGBoost_Regressor_Model_Pickled.pkl&quot;</span>
 
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">models</span><span class="p">,</span> <span class="s2">&quot;XGBoost_Regressor_Model_Pickled.pkl&quot;</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">FilePaths</span><span class="o">.</span><span class="n">path_models</span><span class="p">,</span> <span class="n">pkl_fname</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
     <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">model_optimized_params</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 
-<span class="c1">## test loading:</span>
-
-<span class="c1">#with open(os.path.join(models, &quot;XGBoost_Regressor_Model_Pickled.pkl&quot;), &#39;rb&#39;) as file:</span>
-<span class="c1">#    pickled_xgb_optimized_model = pickle.load(file)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model Saved under: &#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[66]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Model Saved under:  &lt;_io.BufferedWriter name=&#39;C:\\Users\\asgar\\Documents\\InterviewAssignments\\huami-interview\\models\\Jupyter-XGBoost_Regressor_Model_Pickled.pkl&#39;&gt;
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14656,96 +13754,50 @@ Model Prediction on Y Train Data RMSE: 1.650457238010561
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Missing-Data:">Missing Data:<a class="anchor-link" href="#Missing-Data:">&#182;</a></h3><p>This model cannot operate with missing data. I am going to fill the missing data with each column's median</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">processed_stiched_df</span> <span class="o">=</span> <span class="n">stitched_df</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[100]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">missing_value_columns</span> <span class="o">=</span> <span class="n">processed_stiched_df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">processed_stiched_df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">missing_value_columns</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[100]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;feature_10&#39;,
- &#39;feature_23&#39;,
- &#39;feature_36&#39;,
- &#39;feature_49&#39;,
- &#39;feature_50&#39;,
- &#39;feature_62&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[101]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">processed_stiched_df</span> <span class="o">=</span> <span class="n">processed_stiched_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">median</span><span class="p">()),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Initialize-the-model:">Initialize the model:<a class="anchor-link" href="#Initialize-the-model:">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[102]:</div>
+<div class="prompt input_prompt">In&nbsp;[67]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">my_regressor</span> <span class="o">=</span> <span class="n">Regressor_GradientBoost</span><span class="p">(</span><span class="n">target_col</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> 
-                                       <span class="n">feature_cols</span> <span class="o">=</span> <span class="n">feature_list</span><span class="p">,</span> 
-                                       <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
-                                       <span class="n">ntrees</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> 
-                                       <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Parameters</span>
+<span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">ntrees</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">max_depth</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">max_depth</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">max_depth</span>
+<span class="n">ntrees</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">ntrees</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">learning_rate</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;These are hyper parameters set to train the model: &#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;max_depth: &#39;</span><span class="p">,</span> <span class="n">max_depth</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ntrees: &#39;</span><span class="p">,</span> <span class="n">ntrees</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;learning_rate: &#39;</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>These are hyper parameters set to train the model: 
+max_depth:  5
+ntrees:  250
+learning_rate:  0.1
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14753,19 +13805,335 @@ Model Prediction on Y Train Data RMSE: 1.650457238010561
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Split-data-into-training-and-testing-sets:">Split data into training and testing sets:<a class="anchor-link" href="#Split-data-into-training-and-testing-sets:">&#182;</a></h3>
+<h3 id="Train-a-Regressor_GradientBoost-model:">Train a Regressor_GradientBoost model:<a class="anchor-link" href="#Train-a-Regressor_GradientBoost-model:">&#182;</a></h3><p>Fit the model using the model's decision tree method (Based on Scikit-learn 's DecisionTreeRegressor)</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[103]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_tr</span><span class="p">,</span> <span class="n">X_tst</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">,</span> <span class="n">y_tst</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">load_split_data</span><span class="p">(</span><span class="n">processed_stiched_df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">train_regressor_gradientboost</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Trains a regressor base on Parsian&#39;s pa_ml_utils.Regressor_GradientBoost</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X_train : A Pandas DataFrame for features</span>
+<span class="sd">            </span>
+<span class="sd">        y_train : A Pandas DataFrame for target</span>
+<span class="sd">                </span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            A regressor model base on pa_ml_utils.Regressor_GradientBoost</span>
+<span class="sd">            </span>
+<span class="sd">        &#39;&#39;&#39;</span>     
+        <span class="k">try</span><span class="p">:</span>            
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initiating the training process using </span><span class="se">\&#39;</span><span class="s1">pa-gb</span><span class="se">\&#39;</span><span class="s1"> model&#39;</span><span class="p">)</span>
+            
+            <span class="n">regressor</span> <span class="o">=</span> <span class="n">Regressor_GradientBoost</span><span class="p">(</span><span class="n">features_df</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">,</span> 
+                                                <span class="n">target</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">,</span>
+                                                <span class="n">max_depth</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">max_depth</span><span class="p">,</span> 
+                                                <span class="n">ntrees</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">ntrees</span><span class="p">,</span> 
+                                                <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">RegressGB_Parameters</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
+        
+            <span class="n">f0</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">training_rmse</span> <span class="o">=</span> <span class="n">regressor</span><span class="o">.</span><span class="n">boost_gradient</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Training completed&#39;</span><span class="p">)</span>
+    
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;modeller.py Model_Trainer.train_regressor_gradientboost(): &#39;</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+            
+        
+        <span class="k">return</span> <span class="n">f0</span><span class="p">,</span> <span class="n">models</span> 
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f0</span><span class="p">,</span> <span class="n">models</span> <span class="o">=</span> <span class="n">train_regressor_gradientboost</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Initiating the training process using &#39;pa-gb&#39; model
+RMSE at first prediction:  13.515627188810816
+RMSE for tree #0 is: 12.485939437579958
+RMSE for tree #1 is: 11.579720790341586
+RMSE for tree #2 is: 10.78342861420375
+RMSE for tree #3 is: 10.085339499878417
+RMSE for tree #4 is: 9.475547415495809
+RMSE for tree #5 is: 8.941390445559952
+RMSE for tree #6 is: 8.474762111073325
+RMSE for tree #7 is: 8.071758154138564
+RMSE for tree #8 is: 7.711799416401938
+RMSE for tree #9 is: 7.394097540510946
+RMSE for tree #10 is: 7.124403786713729
+RMSE for tree #11 is: 6.896506465826787
+RMSE for tree #12 is: 6.688255426918239
+RMSE for tree #13 is: 6.515810619025053
+RMSE for tree #14 is: 6.358874639850079
+RMSE for tree #15 is: 6.222790412855806
+RMSE for tree #16 is: 6.093898958071987
+RMSE for tree #17 is: 5.980941872890951
+RMSE for tree #18 is: 5.876440397941171
+RMSE for tree #19 is: 5.795758705727741
+RMSE for tree #20 is: 5.718405388793373
+RMSE for tree #21 is: 5.64608381828004
+RMSE for tree #22 is: 5.593104303242884
+RMSE for tree #23 is: 5.531489607588546
+RMSE for tree #24 is: 5.480806827520391
+RMSE for tree #25 is: 5.431299463417782
+RMSE for tree #26 is: 5.380732536413963
+RMSE for tree #27 is: 5.3201480602187745
+RMSE for tree #28 is: 5.270208973991952
+RMSE for tree #29 is: 5.234698866435188
+RMSE for tree #30 is: 5.201727812498848
+RMSE for tree #31 is: 5.164927658819103
+RMSE for tree #32 is: 5.1192091063574425
+RMSE for tree #33 is: 5.086026845363543
+RMSE for tree #34 is: 5.047799093923927
+RMSE for tree #35 is: 5.0239174963586235
+RMSE for tree #36 is: 4.987672604099027
+RMSE for tree #37 is: 4.939574785365044
+RMSE for tree #38 is: 4.920269848684776
+RMSE for tree #39 is: 4.898804666037072
+RMSE for tree #40 is: 4.870362709965085
+RMSE for tree #41 is: 4.841304602117682
+RMSE for tree #42 is: 4.8033837823489955
+RMSE for tree #43 is: 4.775543852786384
+RMSE for tree #44 is: 4.75476162495573
+RMSE for tree #45 is: 4.70847333368319
+RMSE for tree #46 is: 4.697617156614774
+RMSE for tree #47 is: 4.672083711997403
+RMSE for tree #48 is: 4.641051401059713
+RMSE for tree #49 is: 4.624711546118517
+RMSE for tree #50 is: 4.6025321126341385
+RMSE for tree #51 is: 4.592680998746846
+RMSE for tree #52 is: 4.571689615530771
+RMSE for tree #53 is: 4.559530901353922
+RMSE for tree #54 is: 4.536275483584771
+RMSE for tree #55 is: 4.511551997484645
+RMSE for tree #56 is: 4.496526669000663
+RMSE for tree #57 is: 4.4677332764267055
+RMSE for tree #58 is: 4.447301532196042
+RMSE for tree #59 is: 4.439473565672672
+RMSE for tree #60 is: 4.419491784554021
+RMSE for tree #61 is: 4.407047665864166
+RMSE for tree #62 is: 4.382338666611914
+RMSE for tree #63 is: 4.366662515855926
+RMSE for tree #64 is: 4.357836738336944
+RMSE for tree #65 is: 4.343619459314618
+RMSE for tree #66 is: 4.328915211971344
+RMSE for tree #67 is: 4.303676167095986
+RMSE for tree #68 is: 4.283627381677457
+RMSE for tree #69 is: 4.269506847094484
+RMSE for tree #70 is: 4.260117129907032
+RMSE for tree #71 is: 4.255415310353687
+RMSE for tree #72 is: 4.247731383382993
+RMSE for tree #73 is: 4.240056131672901
+RMSE for tree #74 is: 4.233117087447253
+RMSE for tree #75 is: 4.223317520009495
+RMSE for tree #76 is: 4.21388509883755
+RMSE for tree #77 is: 4.20086218614811
+RMSE for tree #78 is: 4.191209000090667
+RMSE for tree #79 is: 4.18451345499587
+RMSE for tree #80 is: 4.171664243692308
+RMSE for tree #81 is: 4.157373725298157
+RMSE for tree #82 is: 4.1486316480115
+RMSE for tree #83 is: 4.137660519909802
+RMSE for tree #84 is: 4.126918946294016
+RMSE for tree #85 is: 4.116690996609314
+RMSE for tree #86 is: 4.108997373004168
+RMSE for tree #87 is: 4.097296596678185
+RMSE for tree #88 is: 4.084812267120755
+RMSE for tree #89 is: 4.074612421986051
+RMSE for tree #90 is: 4.067362117878531
+RMSE for tree #91 is: 4.060514572423506
+RMSE for tree #92 is: 4.055307830547341
+RMSE for tree #93 is: 4.045341709651186
+RMSE for tree #94 is: 4.032549576303636
+RMSE for tree #95 is: 4.023081839563605
+RMSE for tree #96 is: 4.012426016181193
+RMSE for tree #97 is: 4.00565942177046
+RMSE for tree #98 is: 4.000083860248085
+RMSE for tree #99 is: 3.9781088096480577
+RMSE for tree #100 is: 3.9667301693685566
+RMSE for tree #101 is: 3.948495124670893
+RMSE for tree #102 is: 3.9367304478311658
+RMSE for tree #103 is: 3.92875604442072
+RMSE for tree #104 is: 3.9167755105333106
+RMSE for tree #105 is: 3.9087460211400087
+RMSE for tree #106 is: 3.9008273120399783
+RMSE for tree #107 is: 3.8927776232798204
+RMSE for tree #108 is: 3.8694967952533417
+RMSE for tree #109 is: 3.8646154698365254
+RMSE for tree #110 is: 3.857060501731401
+RMSE for tree #111 is: 3.8488734809800818
+RMSE for tree #112 is: 3.842002539918949
+RMSE for tree #113 is: 3.8368785674377888
+RMSE for tree #114 is: 3.8310512538912453
+RMSE for tree #115 is: 3.826363885567077
+RMSE for tree #116 is: 3.814753647691128
+RMSE for tree #117 is: 3.806191912498073
+RMSE for tree #118 is: 3.8027941658100373
+RMSE for tree #119 is: 3.7983312361436017
+RMSE for tree #120 is: 3.7907878590643245
+RMSE for tree #121 is: 3.7839766465219413
+RMSE for tree #122 is: 3.7739221714786875
+RMSE for tree #123 is: 3.7701253778368
+RMSE for tree #124 is: 3.7645542672976156
+RMSE for tree #125 is: 3.7574011870590764
+RMSE for tree #126 is: 3.7471830024121857
+RMSE for tree #127 is: 3.741166609376105
+RMSE for tree #128 is: 3.7362779217002675
+RMSE for tree #129 is: 3.7267037886433036
+RMSE for tree #130 is: 3.7205351897147194
+RMSE for tree #131 is: 3.716116811511385
+RMSE for tree #132 is: 3.7133967741629013
+RMSE for tree #133 is: 3.7095621478482923
+RMSE for tree #134 is: 3.7026280961805713
+RMSE for tree #135 is: 3.6985957807677883
+RMSE for tree #136 is: 3.6931995447748474
+RMSE for tree #137 is: 3.6857705979241717
+RMSE for tree #138 is: 3.6801149679397036
+RMSE for tree #139 is: 3.674320534986667
+RMSE for tree #140 is: 3.665247541155389
+RMSE for tree #141 is: 3.65316330031682
+RMSE for tree #142 is: 3.6470041163626705
+RMSE for tree #143 is: 3.641655370934831
+RMSE for tree #144 is: 3.637275943577232
+RMSE for tree #145 is: 3.631657070506641
+RMSE for tree #146 is: 3.624260651978782
+RMSE for tree #147 is: 3.620495439415639
+RMSE for tree #148 is: 3.6124598423321457
+RMSE for tree #149 is: 3.6042078634331354
+RMSE for tree #150 is: 3.6012980941651365
+RMSE for tree #151 is: 3.596679765363968
+RMSE for tree #152 is: 3.5924762635714487
+RMSE for tree #153 is: 3.5872087562165853
+RMSE for tree #154 is: 3.5780344300798643
+RMSE for tree #155 is: 3.5722875637744003
+RMSE for tree #156 is: 3.5651886379025903
+RMSE for tree #157 is: 3.557387340424754
+RMSE for tree #158 is: 3.5519891836548263
+RMSE for tree #159 is: 3.5466223455350403
+RMSE for tree #160 is: 3.539379826460999
+RMSE for tree #161 is: 3.529320808905817
+RMSE for tree #162 is: 3.5252762911479834
+RMSE for tree #163 is: 3.508138789121358
+RMSE for tree #164 is: 3.5013818778212173
+RMSE for tree #165 is: 3.4988520807662993
+RMSE for tree #166 is: 3.489406091759029
+RMSE for tree #167 is: 3.481704999903256
+RMSE for tree #168 is: 3.4752576927201937
+RMSE for tree #169 is: 3.4715732264404746
+RMSE for tree #170 is: 3.4659386848232376
+RMSE for tree #171 is: 3.455085806522475
+RMSE for tree #172 is: 3.4504581130940584
+RMSE for tree #173 is: 3.4464325730813066
+RMSE for tree #174 is: 3.4420452155477452
+RMSE for tree #175 is: 3.4372922394130607
+RMSE for tree #176 is: 3.4293652615125425
+RMSE for tree #177 is: 3.422178721205286
+RMSE for tree #178 is: 3.4182920970950237
+RMSE for tree #179 is: 3.4146298353107376
+RMSE for tree #180 is: 3.41038962094702
+RMSE for tree #181 is: 3.4058683777108385
+RMSE for tree #182 is: 3.4008972372589152
+RMSE for tree #183 is: 3.3977929872601225
+RMSE for tree #184 is: 3.3895774721049663
+RMSE for tree #185 is: 3.3818782540491443
+RMSE for tree #186 is: 3.3790786899278746
+RMSE for tree #187 is: 3.3736012180572637
+RMSE for tree #188 is: 3.3697719572536333
+RMSE for tree #189 is: 3.3662934324602496
+RMSE for tree #190 is: 3.3637892064714072
+RMSE for tree #191 is: 3.3597893256284754
+RMSE for tree #192 is: 3.3489540643515325
+RMSE for tree #193 is: 3.3433390291529
+RMSE for tree #194 is: 3.3389465302032644
+RMSE for tree #195 is: 3.331294497270814
+RMSE for tree #196 is: 3.3280377232426304
+RMSE for tree #197 is: 3.322599945570877
+RMSE for tree #198 is: 3.318564026580407
+RMSE for tree #199 is: 3.311221112355766
+RMSE for tree #200 is: 3.3086945467326285
+RMSE for tree #201 is: 3.3027306095511304
+RMSE for tree #202 is: 3.2982219545722002
+RMSE for tree #203 is: 3.294260477757347
+RMSE for tree #204 is: 3.2907258912189503
+RMSE for tree #205 is: 3.2839119097399347
+RMSE for tree #206 is: 3.2779516545244074
+RMSE for tree #207 is: 3.2754487721770977
+RMSE for tree #208 is: 3.266925339431294
+RMSE for tree #209 is: 3.2608122677484643
+RMSE for tree #210 is: 3.255909798702393
+RMSE for tree #211 is: 3.251006381542861
+RMSE for tree #212 is: 3.247743926751302
+RMSE for tree #213 is: 3.2437989662872777
+RMSE for tree #214 is: 3.24112913280755
+RMSE for tree #215 is: 3.2373367043377117
+RMSE for tree #216 is: 3.232885160430778
+RMSE for tree #217 is: 3.2296678032175294
+RMSE for tree #218 is: 3.225912296537506
+RMSE for tree #219 is: 3.2212635361685433
+RMSE for tree #220 is: 3.218254940135668
+RMSE for tree #221 is: 3.216058414839148
+RMSE for tree #222 is: 3.2128627849998215
+RMSE for tree #223 is: 3.2088036261185247
+RMSE for tree #224 is: 3.2043235133664636
+RMSE for tree #225 is: 3.200852433678198
+RMSE for tree #226 is: 3.1967131143326633
+RMSE for tree #227 is: 3.193180808870949
+RMSE for tree #228 is: 3.1906843459658893
+RMSE for tree #229 is: 3.1891157243689197
+RMSE for tree #230 is: 3.18060712041955
+RMSE for tree #231 is: 3.173981913258572
+RMSE for tree #232 is: 3.171522417889802
+RMSE for tree #233 is: 3.168730416253524
+RMSE for tree #234 is: 3.167290113325293
+RMSE for tree #235 is: 3.163848163059448
+RMSE for tree #236 is: 3.1608364405917198
+RMSE for tree #237 is: 3.15740911216043
+RMSE for tree #238 is: 3.1554407328683105
+RMSE for tree #239 is: 3.1510015879400957
+RMSE for tree #240 is: 3.1475328041727684
+RMSE for tree #241 is: 3.1464469430334425
+RMSE for tree #242 is: 3.1431619653326606
+RMSE for tree #243 is: 3.135899614630139
+RMSE for tree #244 is: 3.1294892159321686
+RMSE for tree #245 is: 3.12563561872532
+RMSE for tree #246 is: 3.1230929237222256
+RMSE for tree #247 is: 3.119703864937747
+RMSE for tree #248 is: 3.115442447808916
+RMSE for tree #249 is: 3.112849183636682
+Training completed
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14773,20 +14141,103 @@ Model Prediction on Y Train Data RMSE: 1.650457238010561
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Build-a-Regressor_GradientBoost-model:">Build a Regressor_GradientBoost model:<a class="anchor-link" href="#Build-a-Regressor_GradientBoost-model:">&#182;</a></h3><p>Fit the model using the model's decision tree method (Based on Scikit-learn 's DecisionTreeRegressor)</p>
+<h3 id="Predict-using-the-Regressor_GradientBoost-model:">Predict using the Regressor_GradientBoost model:<a class="anchor-link" href="#Predict-using-the-Regressor_GradientBoost-model:">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using the above model, we are going to predict:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[104]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fit_model</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">fit_decisiontree</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">predict_regressor_gradientboost</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">reg_gb_models</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generates a prediction base on Parsian&#39;s </span>
+<span class="sd">        pa_ml_utils.Regressor_GradientBoost model</span>
+<span class="sd">            </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X_test : A Pandas DataFrame for features</span>
+<span class="sd">            </span>
+<span class="sd">        y_test : A Pandas Series for target</span>
+<span class="sd">                </span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Predictions base on reg_gb_models generated from pa_ml_utils.Regressor_GradientBoost</span>
+<span class="sd">            </span>
+<span class="sd">        &#39;&#39;&#39;</span>        
+        <span class="k">try</span><span class="p">:</span>            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initiating the prediction process using </span><span class="se">\&#39;</span><span class="s1">pa-gb</span><span class="se">\&#39;</span><span class="s1"> model&#39;</span><span class="p">)</span>
+            
+            <span class="n">regressor</span> <span class="o">=</span> <span class="n">Regressor_GradientBoost</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">regressor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">reg_gb_models</span><span class="p">)</span>
+            <span class="n">rmse</span> <span class="o">=</span> <span class="n">regressor</span><span class="o">.</span><span class="n">rmse</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">prediction</span><span class="p">)</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Prediction completed&#39;</span><span class="p">)</span>
+            
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;modeller.py Model_Predictor.predict_regressor_gradientboost(): &#39;</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+            
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The RMSE for the Regressor Gradient Boost model: &quot;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">prediction</span><span class="p">,</span> <span class="n">rmse</span>   
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predict_regressor_gradientboost</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Initiating the prediction process using &#39;pa-gb&#39; model
+Prediction completed
+The RMSE for the Regressor Gradient Boost model:  12.738929306363474
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[71]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(array([ 3.07704991,  1.45827648, 11.97125205, ..., 25.35474394,
+        32.84679981, 10.64980486]), 12.738929306363474)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -14794,472 +14245,18 @@ Model Prediction on Y Train Data RMSE: 1.650457238010561
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Gradient boost:</p>
-
+<h3 id="Results:">Results:<a class="anchor-link" href="#Results:">&#182;</a></h3>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[105]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f0</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">training_predictions</span><span class="p">,</span> <span class="n">training_means_sq_err</span><span class="p">,</span> <span class="n">training_r_squared</span>  <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">boost_gradient</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Mean loss at first prediction:  91.3721086792508
-Mean loss for tree #0 is: 77.97227766673323 The training set R Squared is: 0.146651217819192
-Mean loss for tree #1 is: 67.06629550462937 The training set R Squared is: 0.2660091085338573
-Mean loss for tree #2 is: 58.15373029431931 The training set R Squared is: 0.36355052832960455
-Mean loss for tree #3 is: 50.86731047812349 The training set R Squared is: 0.44329499216567114
-Mean loss for tree #4 is: 44.880399497674965 The training set R Squared is: 0.508817295054199
-Mean loss for tree #5 is: 39.985873960062555 The training set R Squared is: 0.5623842490006905
-Mean loss for tree #6 is: 35.89055328404571 The training set R Squared is: 0.6072044981468867
-Mean loss for tree #7 is: 32.50124245838794 The training set R Squared is: 0.6442979928100572
-Mean loss for tree #8 is: 29.65741419050553 The training set R Squared is: 0.6754215852168473
-Mean loss for tree #9 is: 27.274533260209914 The training set R Squared is: 0.7015004506905624
-Mean loss for tree #10 is: 25.253495852421125 The training set R Squared is: 0.7236192070266273
-Mean loss for tree #11 is: 23.636519161913466 The training set R Squared is: 0.7413158183216941
-Mean loss for tree #12 is: 22.261623921449555 The training set R Squared is: 0.7563630275886967
-Mean loss for tree #13 is: 21.09335176331141 The training set R Squared is: 0.7691489003788164
-Mean loss for tree #14 is: 20.04475021280098 The training set R Squared is: 0.7806250670741892
-Mean loss for tree #15 is: 19.21134395257718 The training set R Squared is: 0.789746080830689
-Mean loss for tree #16 is: 18.416733005297353 The training set R Squared is: 0.79844250864401
-Mean loss for tree #17 is: 17.782903030315964 The training set R Squared is: 0.8053793078942753
-Mean loss for tree #18 is: 17.189623578967854 The training set R Squared is: 0.811872311721411
-Mean loss for tree #19 is: 16.66903335062419 The training set R Squared is: 0.8175697858835869
-Mean loss for tree #20 is: 16.235048827741664 The training set R Squared is: 0.8223194247958896
-Mean loss for tree #21 is: 15.82726473117566 The training set R Squared is: 0.8267823194632135
-Mean loss for tree #22 is: 15.48004455746113 The training set R Squared is: 0.8305823868878703
-Mean loss for tree #23 is: 15.146331499649337 The training set R Squared is: 0.8342346289411098
-Mean loss for tree #24 is: 14.766598554797284 The training set R Squared is: 0.838390524545806
-Mean loss for tree #25 is: 14.522862768962797 The training set R Squared is: 0.8410580320528338
-Mean loss for tree #26 is: 14.228813924443363 The training set R Squared is: 0.8442761786926526
-Mean loss for tree #27 is: 14.008788354709722 The training set R Squared is: 0.8466841954596284
-Mean loss for tree #28 is: 13.80175328085178 The training set R Squared is: 0.8489500408784403
-Mean loss for tree #29 is: 13.51760261534493 The training set R Squared is: 0.8520598592859786
-Mean loss for tree #30 is: 13.343738151405129 The training set R Squared is: 0.8539626769669239
-Mean loss for tree #31 is: 13.079621189294796 The training set R Squared is: 0.8568532413407594
-Mean loss for tree #32 is: 12.927715140709864 The training set R Squared is: 0.8585157404422978
-Mean loss for tree #33 is: 12.730077792303977 The training set R Squared is: 0.8606787347220911
-Mean loss for tree #34 is: 12.61252256118844 The training set R Squared is: 0.8619652895889427
-Mean loss for tree #35 is: 12.422305067652903 The training set R Squared is: 0.864047079057145
-Mean loss for tree #36 is: 12.29194473281182 The training set R Squared is: 0.8654737762924924
-Mean loss for tree #37 is: 12.110579641755079 The training set R Squared is: 0.8674586827773931
-Mean loss for tree #38 is: 11.980038262671863 The training set R Squared is: 0.8688873614077852
-Mean loss for tree #39 is: 11.749493309632632 The training set R Squared is: 0.871410505027555
-Mean loss for tree #40 is: 11.627998950556584 The training set R Squared is: 0.8727401707300546
-Mean loss for tree #41 is: 11.565364309337781 The training set R Squared is: 0.8734256604503261
-Mean loss for tree #42 is: 11.287724815549737 The training set R Squared is: 0.8764642189098024
-Mean loss for tree #43 is: 11.070235910629801 The training set R Squared is: 0.8788444737606959
-Mean loss for tree #44 is: 11.015579490791565 The training set R Squared is: 0.8794426477618
-Mean loss for tree #45 is: 10.859694827717236 The training set R Squared is: 0.8811486898497785
-Mean loss for tree #46 is: 10.663967177613978 The training set R Squared is: 0.8832907838972154
-Mean loss for tree #47 is: 10.520565640710304 The training set R Squared is: 0.88486020742236
-Mean loss for tree #48 is: 10.44393715299838 The training set R Squared is: 0.8856988494195726
-Mean loss for tree #49 is: 10.312599600999933 The training set R Squared is: 0.8871362415723479
-Mean loss for tree #50 is: 10.236604186880315 The training set R Squared is: 0.8879679550483588
-Mean loss for tree #51 is: 10.19107381025984 The training set R Squared is: 0.8884662512711169
-Mean loss for tree #52 is: 10.148620992489548 The training set R Squared is: 0.8889308658935002
-Mean loss for tree #53 is: 10.050048354321062 The training set R Squared is: 0.8900096703513714
-Mean loss for tree #54 is: 9.923138962480524 The training set R Squared is: 0.891398599573594
-Mean loss for tree #55 is: 9.856844726628049 The training set R Squared is: 0.8921241408444572
-Mean loss for tree #56 is: 9.793895209830362 The training set R Squared is: 0.8928130766445325
-Mean loss for tree #57 is: 9.667092229737788 The training set R Squared is: 0.894200841269053
-Mean loss for tree #58 is: 9.56820237600607 The training set R Squared is: 0.8952831174161272
-Mean loss for tree #59 is: 9.467135387574562 The training set R Squared is: 0.8963892206886944
-Mean loss for tree #60 is: 9.312246907353991 The training set R Squared is: 0.8980843602937569
-Mean loss for tree #61 is: 9.239187468311766 The training set R Squared is: 0.8988839416988355
-Mean loss for tree #62 is: 9.166582444665185 The training set R Squared is: 0.8996785498642366
-Mean loss for tree #63 is: 9.079898692482164 The training set R Squared is: 0.9006272392776256
-Mean loss for tree #64 is: 9.014587258199121 The training set R Squared is: 0.9013420245138082
-Mean loss for tree #65 is: 8.977826138142474 The training set R Squared is: 0.9017443477236802
-Mean loss for tree #66 is: 8.92776826244797 The training set R Squared is: 0.9022921940678049
-Mean loss for tree #67 is: 8.840819198193879 The training set R Squared is: 0.9032437871251479
-Mean loss for tree #68 is: 8.790339642488346 The training set R Squared is: 0.9037962484444186
-Mean loss for tree #69 is: 8.723999005546254 The training set R Squared is: 0.9045222975408123
-</pre>
-</div>
-</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The XGBoost model, with some hyper parameter optimization generated a model that predicted target with RMSE of 1.87.</p>
+<p>In comparison, my model without any hyper parameter tuning, produced a prediction with RMSE of 12.74. Definitely, cross validation and hyper parameter techniques can be used to insure we are not overfitting.</p>
 
 </div>
 </div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[106]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tst</span><span class="p">,</span> <span class="n">f0</span><span class="p">,</span> <span class="n">models</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[107]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loss</span><span class="p">,</span> <span class="n">r_squared</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">loss_r_squared</span><span class="p">(</span><span class="n">y_tst</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss Squared Mean:&#39;</span><span class="p">,</span> <span class="n">loss</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;R Squared: &#39;</span><span class="p">,</span> <span class="n">r_squared</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Loss Squared Mean: 47.65400273124723 R Squared:  0.4770418033609244
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[114]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">my_regressor</span><span class="o">.</span><span class="n">ntrees</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="n">my_regressor</span><span class="o">.</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[109]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fit_model_2</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">fit_decisiontree</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[110]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f0_2</span><span class="p">,</span> <span class="n">models_2</span><span class="p">,</span> <span class="n">training_predictions_2</span><span class="p">,</span> <span class="n">training_means_sq_err_2</span><span class="p">,</span> <span class="n">training_r_squared_2</span>  <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">boost_gradient</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Mean loss at first prediction:  91.3721086792508
-Mean loss for tree #0 is: 78.87153670368777 The training set R Squared is: 0.13680949423465527
-Mean loss for tree #1 is: 68.69520508540084 The training set R Squared is: 0.24818190060004996
-Mean loss for tree #2 is: 60.343939552109276 The training set R Squared is: 0.33958031149376533
-Mean loss for tree #3 is: 53.52307005079341 The training set R Squared is: 0.41422967222220286
-Mean loss for tree #4 is: 47.92480631692255 The training set R Squared is: 0.4754985190814308
-Mean loss for tree #5 is: 43.32592095272779 The training set R Squared is: 0.5258299104728279
-Mean loss for tree #6 is: 39.46806436052665 The training set R Squared is: 0.5680512912416893
-Mean loss for tree #7 is: 36.340034237744376 The training set R Squared is: 0.6022852622859929
-Mean loss for tree #8 is: 33.71611005495408 The training set R Squared is: 0.6310021674851535
-Mean loss for tree #9 is: 31.552756001356308 The training set R Squared is: 0.6546784740175275
-Mean loss for tree #10 is: 29.721908966266387 The training set R Squared is: 0.6747157377028362
-Mean loss for tree #11 is: 28.19714157243684 The training set R Squared is: 0.6914031865958274
-Mean loss for tree #12 is: 26.88399047397014 The training set R Squared is: 0.705774651996464
-Mean loss for tree #13 is: 25.796487009159854 The training set R Squared is: 0.7176765713078367
-Mean loss for tree #14 is: 24.848188218825303 The training set R Squared is: 0.7280549986424114
-Mean loss for tree #15 is: 24.056251275490812 The training set R Squared is: 0.7367221614646449
-Mean loss for tree #16 is: 23.39580974306558 The training set R Squared is: 0.743950204485343
-Mean loss for tree #17 is: 22.805155175522543 The training set R Squared is: 0.7504144809049376
-Mean loss for tree #18 is: 22.29350286555381 The training set R Squared is: 0.7560141361757047
-Mean loss for tree #19 is: 21.80547558385796 The training set R Squared is: 0.7613552330240934
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[111]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred_2</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tst</span><span class="p">,</span> <span class="n">f0_2</span><span class="p">,</span> <span class="n">models_2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[113]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">loss_2</span><span class="p">,</span> <span class="n">r_squared_2</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">loss_r_squared</span><span class="p">(</span><span class="n">y_tst</span><span class="p">,</span> <span class="n">y_pred_2</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss Squared Mean:&#39;</span><span class="p">,</span> <span class="n">loss_2</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;R Squared: &#39;</span><span class="p">,</span> <span class="n">r_squared_2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Loss Squared Mean: 22.380939730764197 R Squared:  0.7543900782753485
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[121]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">my_regressor</span><span class="o">.</span><span class="n">ntrees</span> <span class="o">=</span> <span class="mi">150</span>
-<span class="n">my_regressor</span><span class="o">.</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">2</span>
-
-<span class="n">fit_model_3</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">fit_decisiontree</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
-<span class="n">f0_3</span><span class="p">,</span> <span class="n">models_3</span><span class="p">,</span> <span class="n">training_predictions_3</span><span class="p">,</span> <span class="n">training_means_sq_err_3</span><span class="p">,</span> <span class="n">training_r_squared_3</span>  <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">boost_gradient</span><span class="p">(</span><span class="n">X_tr</span><span class="p">,</span> <span class="n">y_tr</span><span class="p">)</span>
-<span class="n">y_pred_3</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_tst</span><span class="p">,</span> <span class="n">f0_3</span><span class="p">,</span> <span class="n">models_3</span><span class="p">)</span>
-
-<span class="n">loss_3</span><span class="p">,</span> <span class="n">r_squared_3</span> <span class="o">=</span> <span class="n">my_regressor</span><span class="o">.</span><span class="n">loss_r_squared</span><span class="p">(</span><span class="n">y_tst</span><span class="p">,</span> <span class="n">y_pred_3</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loss Squared Mean:&#39;</span><span class="p">,</span> <span class="n">loss_3</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="s1">&#39;R Squared: &#39;</span><span class="p">,</span> <span class="n">r_squared_3</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Mean loss at first prediction:  91.3721086792508
-Mean loss for tree #0 is: 79.57217147960725 The training set R Squared is: 0.12914156595718906
-Mean loss for tree #1 is: 69.9397910080698 The training set R Squared is: 0.23456083022465912
-Mean loss for tree #2 is: 62.011348183545536 The training set R Squared is: 0.3213317599878871
-Mean loss for tree #3 is: 55.50225333276047 The training set R Squared is: 0.3925689782689358
-Mean loss for tree #4 is: 50.13668689114958 The training set R Squared is: 0.4512911257510036
-Mean loss for tree #5 is: 45.73893987795191 The training set R Squared is: 0.49942120698437875
-Mean loss for tree #6 is: 42.08815528447682 The training set R Squared is: 0.5393763382191225
-Mean loss for tree #7 is: 39.100893647352 The training set R Squared is: 0.572069702532434
-Mean loss for tree #8 is: 36.59117211720176 The training set R Squared is: 0.5995367443510636
-Mean loss for tree #9 is: 34.502687670471715 The training set R Squared is: 0.6223936585332833
-Mean loss for tree #10 is: 32.73121586525208 The training set R Squared is: 0.6417811043394961
-Mean loss for tree #11 is: 31.237120940798725 The training set R Squared is: 0.6581328657911172
-Mean loss for tree #12 is: 29.98798126138569 The training set R Squared is: 0.6718037736586119
-Mean loss for tree #13 is: 28.891408517747845 The training set R Squared is: 0.6838049495041452
-Mean loss for tree #14 is: 27.98170413950797 The training set R Squared is: 0.6937609896064316
-Mean loss for tree #15 is: 27.188541744224022 The training set R Squared is: 0.7024415640918866
-Mean loss for tree #16 is: 26.473320854982436 The training set R Squared is: 0.7102691265677925
-Mean loss for tree #17 is: 25.889359789154742 The training set R Squared is: 0.7166601475726497
-Mean loss for tree #18 is: 25.35177773608504 The training set R Squared is: 0.7225435846612815
-Mean loss for tree #19 is: 24.858708967341347 The training set R Squared is: 0.7279398568483936
-Mean loss for tree #20 is: 24.465029704418637 The training set R Squared is: 0.732248384566685
-Mean loss for tree #21 is: 24.050643259672967 The training set R Squared is: 0.7367835370408391
-Mean loss for tree #22 is: 23.708234348100163 The training set R Squared is: 0.7405309487676928
-Mean loss for tree #23 is: 23.430474744048812 The training set R Squared is: 0.7435708217449933
-Mean loss for tree #24 is: 23.142997277856285 The training set R Squared is: 0.746717049520041
-Mean loss for tree #25 is: 22.86546020531392 The training set R Squared is: 0.7497544870549184
-Mean loss for tree #26 is: 22.624400449201488 The training set R Squared is: 0.7523927074002345
-Mean loss for tree #27 is: 22.39303205265402 The training set R Squared is: 0.7549248629988361
-Mean loss for tree #28 is: 22.206329700753955 The training set R Squared is: 0.7569681818474207
-Mean loss for tree #29 is: 21.973068399668815 The training set R Squared is: 0.7595210538830618
-Mean loss for tree #30 is: 21.801932316423834 The training set R Squared is: 0.7613940114597131
-Mean loss for tree #31 is: 21.62931338644068 The training set R Squared is: 0.7632831976947532
-Mean loss for tree #32 is: 21.437371240736034 The training set R Squared is: 0.7653838622025334
-Mean loss for tree #33 is: 21.26205909151963 The training set R Squared is: 0.767302523725735
-Mean loss for tree #34 is: 21.127442692358546 The training set R Squared is: 0.7687758004302667
-Mean loss for tree #35 is: 20.99829965020312 The training set R Squared is: 0.7701891752994952
-Mean loss for tree #36 is: 20.87549329074507 The training set R Squared is: 0.7715331998736553
-Mean loss for tree #37 is: 20.73359912507587 The training set R Squared is: 0.7730861263379828
-Mean loss for tree #38 is: 20.611015279097224 The training set R Squared is: 0.7744277156670456
-Mean loss for tree #39 is: 20.498880446981854 The training set R Squared is: 0.7756549482847193
-Mean loss for tree #40 is: 20.405251776393303 The training set R Squared is: 0.7766796446821329
-Mean loss for tree #41 is: 20.314933364147276 The training set R Squared is: 0.7776681127557262
-Mean loss for tree #42 is: 20.154601154531395 The training set R Squared is: 0.7794228299438564
-Mean loss for tree #43 is: 20.041706042120936 The training set R Squared is: 0.78065838326579
-Mean loss for tree #44 is: 19.97100943915757 The training set R Squared is: 0.7814321051814351
-Mean loss for tree #45 is: 19.842603854207287 The training set R Squared is: 0.7828374091281949
-Mean loss for tree #46 is: 19.75277261633349 The training set R Squared is: 0.7838205454393951
-Mean loss for tree #47 is: 19.581257046376617 The training set R Squared is: 0.7856976562168042
-Mean loss for tree #48 is: 19.496583087042552 The training set R Squared is: 0.7866243499372197
-Mean loss for tree #49 is: 19.431762364153496 The training set R Squared is: 0.7873337647009379
-Mean loss for tree #50 is: 19.315487306724886 The training set R Squared is: 0.788606309015712
-Mean loss for tree #51 is: 19.249656169837714 The training set R Squared is: 0.7893267820116753
-Mean loss for tree #52 is: 19.111118143611687 The training set R Squared is: 0.7908429780175246
-Mean loss for tree #53 is: 19.036359325239985 The training set R Squared is: 0.7916611578696918
-Mean loss for tree #54 is: 18.95185926623826 The training set R Squared is: 0.7925859483798663
-Mean loss for tree #55 is: 18.88400677954 The training set R Squared is: 0.7933285435511885
-Mean loss for tree #56 is: 18.832417483299434 The training set R Squared is: 0.7938931501580273
-Mean loss for tree #57 is: 18.770114293102186 The training set R Squared is: 0.7945750123925467
-Mean loss for tree #58 is: 18.70540479245096 The training set R Squared is: 0.7952832099113165
-Mean loss for tree #59 is: 18.659777792827555 The training set R Squared is: 0.795782563601222
-Mean loss for tree #60 is: 18.5988660137732 The training set R Squared is: 0.7964491978721646
-Mean loss for tree #61 is: 18.543623992060763 The training set R Squared is: 0.7970537808517093
-Mean loss for tree #62 is: 18.501781472460497 The training set R Squared is: 0.797511716213005
-Mean loss for tree #63 is: 18.44754616055966 The training set R Squared is: 0.7981052814998904
-Mean loss for tree #64 is: 18.36601737795368 The training set R Squared is: 0.7989975535923681
-Mean loss for tree #65 is: 18.300838236556615 The training set R Squared is: 0.7997108909809788
-Mean loss for tree #66 is: 18.172676264398856 The training set R Squared is: 0.8011135287663012
-Mean loss for tree #67 is: 18.08597406727102 The training set R Squared is: 0.8020624200459332
-Mean loss for tree #68 is: 18.029907593280797 The training set R Squared is: 0.8026760260445329
-Mean loss for tree #69 is: 17.96846942218012 The training set R Squared is: 0.8033484212862405
-Mean loss for tree #70 is: 17.925169220685053 The training set R Squared is: 0.803822309895371
-Mean loss for tree #71 is: 17.877233074041758 The training set R Squared is: 0.8043469354877568
-Mean loss for tree #72 is: 17.7863757357629 The training set R Squared is: 0.8053413017072966
-Mean loss for tree #73 is: 17.755061684573374 The training set R Squared is: 0.8056840107860488
-Mean loss for tree #74 is: 17.688493409940985 The training set R Squared is: 0.8064125512082287
-Mean loss for tree #75 is: 17.647006089465407 The training set R Squared is: 0.8068665991783864
-Mean loss for tree #76 is: 17.614238908612666 The training set R Squared is: 0.8072252116841848
-Mean loss for tree #77 is: 17.5611736302476 The training set R Squared is: 0.8078059718213003
-Mean loss for tree #78 is: 17.487018441708287 The training set R Squared is: 0.8086175453923896
-Mean loss for tree #79 is: 17.447192819010265 The training set R Squared is: 0.8090534073121124
-Mean loss for tree #80 is: 17.408615958373808 The training set R Squared is: 0.8094756024567193
-Mean loss for tree #81 is: 17.379370546832256 The training set R Squared is: 0.8097956718079012
-Mean loss for tree #82 is: 17.347928909041574 The training set R Squared is: 0.8101397772274377
-Mean loss for tree #83 is: 17.316383525338637 The training set R Squared is: 0.8104850180690816
-Mean loss for tree #84 is: 17.251199428002913 The training set R Squared is: 0.8111984096967685
-Mean loss for tree #85 is: 17.194747312203493 The training set R Squared is: 0.8118162362591088
-Mean loss for tree #86 is: 17.149504142217165 The training set R Squared is: 0.8123113892181447
-Mean loss for tree #87 is: 17.071558785800626 The training set R Squared is: 0.8131644433671982
-Mean loss for tree #88 is: 17.043850481874898 The training set R Squared is: 0.8134676902149183
-Mean loss for tree #89 is: 16.997883195506216 The training set R Squared is: 0.8139707680910093
-Mean loss for tree #90 is: 16.966988443050507 The training set R Squared is: 0.8143088882559297
-Mean loss for tree #91 is: 16.944641095906356 The training set R Squared is: 0.8145534634054664
-Mean loss for tree #92 is: 16.91150373504358 The training set R Squared is: 0.8149161272570731
-Mean loss for tree #93 is: 16.85138998717712 The training set R Squared is: 0.8155740276682084
-Mean loss for tree #94 is: 16.82737634945258 The training set R Squared is: 0.8158368391330195
-Mean loss for tree #95 is: 16.80362626158567 The training set R Squared is: 0.816096766239984
-Mean loss for tree #96 is: 16.76378199348035 The training set R Squared is: 0.8165328322198782
-Mean loss for tree #97 is: 16.690720928517525 The training set R Squared is: 0.8173324314194363
-Mean loss for tree #98 is: 16.650089311064317 The training set R Squared is: 0.8177771143543193
-Mean loss for tree #99 is: 16.613731235042824 The training set R Squared is: 0.818175026545977
-Mean loss for tree #100 is: 16.568060570642835 The training set R Squared is: 0.8186748581144923
-Mean loss for tree #101 is: 16.544685520126023 The training set R Squared is: 0.8189306807156677
-Mean loss for tree #102 is: 16.51780887058641 The training set R Squared is: 0.8192248257225834
-Mean loss for tree #103 is: 16.451810604157195 The training set R Squared is: 0.8199471278274951
-Mean loss for tree #104 is: 16.39767578819999 The training set R Squared is: 0.8205395932607651
-Mean loss for tree #105 is: 16.38059449005068 The training set R Squared is: 0.8207265354075106
-Mean loss for tree #106 is: 16.33819201258055 The training set R Squared is: 0.8211905990926329
-Mean loss for tree #107 is: 16.27717296363512 The training set R Squared is: 0.8218584073530198
-Mean loss for tree #108 is: 16.25013829634717 The training set R Squared is: 0.8221542817470627
-Mean loss for tree #109 is: 16.225473795550666 The training set R Squared is: 0.8224242164257385
-Mean loss for tree #110 is: 16.176297558924116 The training set R Squared is: 0.822962413883776
-Mean loss for tree #111 is: 16.12862871117086 The training set R Squared is: 0.8234841140879496
-Mean loss for tree #112 is: 16.095841743962765 The training set R Squared is: 0.823842943140727
-Mean loss for tree #113 is: 16.075282988193152 The training set R Squared is: 0.8240679434834615
-Mean loss for tree #114 is: 16.044945977349933 The training set R Squared is: 0.8243999595798605
-Mean loss for tree #115 is: 16.003625114756137 The training set R Squared is: 0.8248521857919024
-Mean loss for tree #116 is: 15.958388698050003 The training set R Squared is: 0.8253472648413018
-Mean loss for tree #117 is: 15.914339114570819 The training set R Squared is: 0.825829354880762
-Mean loss for tree #118 is: 15.859939713637438 The training set R Squared is: 0.8264247160004622
-Mean loss for tree #119 is: 15.8250229392768 The training set R Squared is: 0.8268068542138147
-Mean loss for tree #120 is: 15.804581760182092 The training set R Squared is: 0.8270305677670043
-Mean loss for tree #121 is: 15.770558785474776 The training set R Squared is: 0.8274029240056731
-Mean loss for tree #122 is: 15.747588279966658 The training set R Squared is: 0.8276543191615932
-Mean loss for tree #123 is: 15.716915519024196 The training set R Squared is: 0.8279900097939533
-Mean loss for tree #124 is: 15.67665997496305 The training set R Squared is: 0.8284305768843114
-Mean loss for tree #125 is: 15.628119248651815 The training set R Squared is: 0.828961819153025
-Mean loss for tree #126 is: 15.562512942907478 The training set R Squared is: 0.8296798315387792
-Mean loss for tree #127 is: 15.539227818169023 The training set R Squared is: 0.8299346699689653
-Mean loss for tree #128 is: 15.494625363573974 The training set R Squared is: 0.8304228107729714
-Mean loss for tree #129 is: 15.470605895721363 The training set R Squared is: 0.8306856860442068
-Mean loss for tree #130 is: 15.454776611839648 The training set R Squared is: 0.8308589258228531
-Mean loss for tree #131 is: 15.429510401436328 The training set R Squared is: 0.8311354457671587
-Mean loss for tree #132 is: 15.411295343024962 The training set R Squared is: 0.8313347960795767
-Mean loss for tree #133 is: 15.385012491895504 The training set R Squared is: 0.8316224424030545
-Mean loss for tree #134 is: 15.339737235362625 The training set R Squared is: 0.8321179465255586
-Mean loss for tree #135 is: 15.302066543164472 The training set R Squared is: 0.8325302243283064
-Mean loss for tree #136 is: 15.27084189966654 The training set R Squared is: 0.8328719549061417
-Mean loss for tree #137 is: 15.234146734970523 The training set R Squared is: 0.833273556283489
-Mean loss for tree #138 is: 15.214738109818407 The training set R Squared is: 0.8334859692991565
-Mean loss for tree #139 is: 15.18931970747461 The training set R Squared is: 0.8337641548714296
-Mean loss for tree #140 is: 15.149210325878423 The training set R Squared is: 0.8342031223219623
-Mean loss for tree #141 is: 15.100647356622577 The training set R Squared is: 0.8347346080232119
-Mean loss for tree #142 is: 15.07316584502604 The training set R Squared is: 0.8350353727969928
-Mean loss for tree #143 is: 15.047124485832432 The training set R Squared is: 0.8353203761702258
-Mean loss for tree #144 is: 15.007931010126278 The training set R Squared is: 0.8357493197097001
-Mean loss for tree #145 is: 14.957994827049179 The training set R Squared is: 0.8362958342183309
-Mean loss for tree #146 is: 14.92450444181377 The training set R Squared is: 0.8366623616600087
-Mean loss for tree #147 is: 14.900670513566823 The training set R Squared is: 0.8369232063378012
-Mean loss for tree #148 is: 14.84979254329225 The training set R Squared is: 0.8374800280092034
-Mean loss for tree #149 is: 14.813176932751967 The training set R Squared is: 0.837880758725277
-Loss Squared Mean: 29.40649632033283 R Squared:  0.6772911528149352
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     </div>
   </div>

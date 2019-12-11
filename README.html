@@ -13093,12 +13093,12 @@ b. method for loading the data, apply all required preprocessing, and making pre
 </ol>
 <p>For task #2.b, please, implement the prediction function (forward pass) for Boosting without using XGboost or LightGBM libraries (low-level implementation).</p>
 <p>Please provide a solution in a form that is suitable for running (i.e. by giving requirements.txt for pip/virtualenv or as a Docker image with the environment set up).</p>
-<h2 id="About-GB_Booster:">About GB_Booster:<a class="anchor-link" href="#About-GB_Booster:">&#182;</a></h2><p>This package provides regressing using gradient boosting. There are two methods:</p>
+<h2 id="About-GB_Regressor:">About GB_Regressor:<a class="anchor-link" href="#About-GB_Regressor:">&#182;</a></h2><p>This package provides regressing using gradient boosting technique. There are two options:</p>
 <ol>
 <li><strong>XGBoost</strong>: This is built using XGB libraries</li>
 <li><strong>PA-GB</strong>: This is built in part by using Scikit-learn's DecisionTreeRegressor</li>
 </ol>
-<p>Once installed, the user needs to place the raw data into the <code>./data/raw</code> folder. Through the gateway <code>gb_booster.py</code>, the application will provide three functionalities:</p>
+<p>Once installed, the user needs to place the raw data into the <code>./data/raw</code> folder. Through the gateway <code>gb_regressor.py</code>, the application will provide three functionalities:</p>
 <p>i. <strong>splitdata</strong>: The application automatically processes the data and create X_train, X_test, y_train, y_test data tables and saves them in <code>./data/processed</code> folder.</p>
 <p>ii. <strong>train</strong>: The application provide user options to select betweeen <code>xgb</code> or <code>pa-gb</code> regressors to train. The application will then save the serialized trained model under <code>./models/</code> for a provided model name.</p>
 <p>iii. <strong>predict</strong>: The application provide user options to select predictor methods <code>xgb</code> or <code>pa-gb</code>. NOTE: 'xgb' predictor will only with 'xgb' trained models and 'pa-gb' predictor only works with 'pa-gb' trained model. The application utilizes the splited X_test, and y_test data to perform <strong>Predictions</strong> and evaluate <strong>RMSE</strong>.</p>
@@ -13120,12 +13120,12 @@ b. method for loading the data, apply all required preprocessing, and making pre
 </pre></div>
 <p>The program will automatically stitches the files and does the processing.</p>
 <ol>
-<li><p>Navigate to the package folder <code>gb_booster</code>:</p>
-<div class="highlight"><pre><span></span>foo@bar huami-interview:$ <span class="nb">cd</span> gb_booster
+<li><p>Navigate to the package folder <code>gb_regressor</code>:</p>
+<div class="highlight"><pre><span></span>foo@bar huami-interview:$ <span class="nb">cd</span> gb_regressor
 </pre></div>
 </li>
 <li><p>Run the following command to see the program's option:</p>
-<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_booster:$ python gb_booster.py -h
+<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_regressor:$ python gb_regressor.py -h
 </pre></div>
 </li>
 </ol>
@@ -13154,19 +13154,19 @@ Options:
 </ol>
 <p>4-1. <strong>Splitting Data:</strong></p>
 <ul>
-<li>example: Splitting the data located in the <code>./data/raw</code>:<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_booster:$ python splitdat <span class="m">0</span>.2
+<li>example: Splitting the data located in the <code>./data/raw</code>:<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_regressor:$ python gb_regressor.py splitdat <span class="m">0</span>.2
 </pre></div>
 </li>
 </ul>
 <p>4-2. <strong>Training:</strong> select either Parsian's Gradient Booster Regressor <code>pa-ga</code> or XGBoost Regressor <code>xgb</code>:</p>
 <ul>
-<li>example: Train the <code>xgb</code> model, serialize and save it as <code>xgb-trained-model</code><div class="highlight"><pre><span></span>foo@bar huami-interview/gb_booster:$ python gb_booster.py train xgb xgb-trained-model
+<li>example: Train the <code>xgb</code> model, serialize and save it as <code>xgb-trained-model</code><div class="highlight"><pre><span></span>foo@bar huami-interview/gb_regressor:$ python gb_regressor.py train xgb xgb-trained-model
 </pre></div>
 </li>
 </ul>
 <p>4-3. <strong>Predicting:</strong> select either Parsian's Gradient Booster Predictor <code>pa-ga</code> or XGBoost Predictor <code>xgb</code>:</p>
 <ul>
-<li>example: Using the step above's pre-trained serialized model, lets do some predictions on the X_test data:<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_booster:$ python gb_booster.py predict xgb xgb-trained-model
+<li>example: Using the step above's pre-trained serialized model, lets do some predictions on the X_test data:<div class="highlight"><pre><span></span>foo@bar huami-interview/gb_regressor:$ python gb_regressor.py predict xgb xgb-trained-model
 </pre></div>
 </li>
 </ul>
