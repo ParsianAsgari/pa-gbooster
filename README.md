@@ -32,6 +32,11 @@ foo@bar pa-gbooster:$ pip install .
 
 ## How to run:
 
+Note: The feature column headers and target header needs to be defined under Data_Properties class located in:
+```bash
+/gb_regressor/pa_app_config/appconfig.py
+```
+
 1. Place the raw .csv files into:
 
 ```bash
