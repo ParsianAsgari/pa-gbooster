@@ -1,32 +1,3 @@
-# Huami Take Home Assignment
-
-Please use Python only for the assignment:
-
-### The data:
-
-Given the data for the regression problem, 15 records for 15 patients:
-
-https://drive.google.com/file/d/11JVsckOQ741y7tpPMdSvAAhMFYtnAmdg/view?usp=sharing
-
-It includes 66 columns.
-
-Target - 'target' (1st column)
-
-All features are representing parameters of the human body (e.g. heart rate/respiration, etc.); they are numerical.
-
-### The tasks:
-
-1. Prepare and train regression model with one of boosting algorithms (e.g. lightGBM, XGBoost). Please, use one-hold-out cross-validation (patient-wise) only. 
-
-2. Create the class, which includes methods:
-a. method for loading the model and storing it in the memory
-b. method for loading the data, apply all required preprocessing, and making predictions. 
-
-For task #2.b, please, implement the prediction function (forward pass) for Boosting without using XGboost or LightGBM libraries (low-level implementation).
-
-Please provide a solution in a form that is suitable for running (i.e. by giving requirements.txt for pip/virtualenv or as a Docker image with the environment set up).
-
-
 ## About GB_Regressor:
 
 This package provides regressing using gradient boosting technique. There are two options:
