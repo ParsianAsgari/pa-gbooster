@@ -21,13 +21,13 @@ In the project's root directory (where this file is), run the followings:
 1. Install requirements:
 
 ```bash
-foo@bar huami-interview:$ pip install -r requirements.txt
+foo@bar pa-gbooster:$ pip install -r requirements.txt
 ```
 
 2. To setup, run:
 
 ```bash
-foo@bar huami-interview:$ pip install .
+foo@bar pa-gbooster:$ pip install .
 ```
 
 ## How to run:
@@ -41,12 +41,12 @@ The program will automatically stitches the files and does the processing.
 
 2. Navigate to the package folder ```gb_regressor```:
 ```bash
-foo@bar huami-interview:$ cd gb_regressor
+foo@bar pa-gbooster:$ cd gb_regressor
 ```
 
 3. Run the following command to see the program's option:
 ```bash
-foo@bar huami-interview/gb_regressor:$ python gb_regressor.py -h
+foo@bar pa-gbooster/gb_regressor:$ python gb_regressor.py -h
 ```
 
 Here are the options:
@@ -77,7 +77,7 @@ Options:
 
 - example: Splitting the data located in the ```./data/raw```:
 ```bash
-foo@bar huami-interview/gb_regressor:$ python gb_regressor.py splitdat 0.2
+foo@bar pa-gbooster/gb_regressor:$ python gb_regressor.py splitdat 0.2
 ```
     
 4-2. **Training:** select either Parsian's Gradient Booster Regressor ```pa-ga``` or XGBoost Regressor ```xgb```:
@@ -85,11 +85,11 @@ foo@bar huami-interview/gb_regressor:$ python gb_regressor.py splitdat 0.2
 
 - example: Train the ```xgb``` model, serialize and save it as ```xgb-trained-model```
 ```bash
-foo@bar huami-interview/gb_regressor:$ python gb_regressor.py train xgb xgb-trained-model
+foo@bar pa-gbooster/gb_regressor:$ python gb_regressor.py train xgb xgb-trained-model
 ```
 
 4-3. **Predicting:** select either Parsian's Gradient Booster Predictor ```pa-ga``` or XGBoost Predictor ```xgb```:
 - example: Using the step above's pre-trained serialized model, lets do some predictions on the X_test data:
 ```bash
-foo@bar huami-interview/gb_regressor:$ python gb_regressor.py predict xgb xgb-trained-model
+foo@bar pa-gbooster/gb_regressor:$ python gb_regressor.py predict xgb xgb-trained-model
 ```
